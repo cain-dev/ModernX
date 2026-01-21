@@ -1448,8 +1448,14 @@ function osc_init()
             return (icons.pause)
         end
     end
-    ne.eventresponder['mbtn_left_up'] =
-        function () mp.commandv('cycle', 'pause') end
+    ne.eventresponder['mbtn_left_up'] = function ()
+    if mp.get_property_bool("eof-reached") then
+        mp.command("no-osd seek 0 absolute")
+        mp.set_property("pause", "no")
+    else
+        mp.commandv('cycle', 'pause')
+    end
+end
     --ne.eventresponder['mbtn_right_up'] =
     --    function () mp.commandv('script-binding', 'open-file-dialog') end
 
@@ -2740,3 +2746,4 @@ end)
 
 set_virt_mouse_area(0, 0, 0, 0, 'input')
 set_virt_mouse_area(0, 0, 0, 0, 'window-controls')
+
